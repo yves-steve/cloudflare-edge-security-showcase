@@ -1,0 +1,6 @@
+* text=auto
+
+# Files consumed by Linux must stay LF even when contributors use Windows.
+*.sh text eol=lf
+*.tftpl text eol=lf
+Dockerfile text eol=lf

@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A portfolio lab showing a private Google Cloud origin protected by Cloudflare Tunnel, CDN, WAF, TLS, and DDoS controls.">
+    <title>Edgeward — Cloudflare Security Lab</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/script.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="Edgeward home">
+        <span class="brand-mark" aria-hidden="true">E</span>
+        <span>EDGEWARD</span>
+      </a>
+      <nav aria-label="Primary navigation">
+        <a href="#route">Request route</a>
+        <a href="#controls">Controls</a>
+        <a class="nav-cta" href="#deploy">Deploy</a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="hero" id="top" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="status-dot" aria-hidden="true"></span> Reference implementation</p>
+          <h1 id="hero-title">A small website with a deliberately serious edge.</h1>
+          <p class="hero-lede">
+            Static content on Google Cloud. Public delivery through Cloudflare. No inbound origin ports, no origin address in DNS, and every infrastructure decision preserved as code.
+          </p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#route">Trace a request</a>
+            <a class="button button-secondary" href="#controls">Inspect the controls</a>
+          </div>
+        </div>
+
+        <aside class="signal-card" aria-label="Security posture summary">
+          <div class="signal-card-header">
+            <span>EDGE POSTURE</span>
+            <span class="live-label">DESIGNED</span>
+          </div>
+          <dl class="signal-grid">
+            <div>
+              <dt>Origin ingress</dt>
+              <dd>Closed</dd>
+            </div>
+            <div>
+              <dt>Browser TLS</dt>
+              <dd>Managed</dd>
+            </div>
+            <div>
+              <dt>DNS state</dt>
+              <dd>Declared</dd>
+            </div>
+            <div>
+              <dt>Deploy path</dt>
+              <dd>Reviewed</dd>
+            </div>
+          </dl>
+          <div class="signal-trace" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <p class="signal-note">A portfolio lab, not a claim of certification.</p>
+        </aside>
+      </section>
+
+      <section class="route-section" id="route" aria-labelledby="route-title">
+        <div class="section-heading">
+          <p class="eyebrow">01 / REQUEST ROUTE</p>
+          <h2 id="route-title">The origin never waits for strangers.</h2>
+          <p>The connector calls outward first. Visitor requests cross the edge only after Cloudflare has terminated TLS and applied the zone's controls.</p>
+        </div>
+
+        <ol class="route-map" aria-label="Request flow">
+          <li class="route-node">
+            <span class="node-index">01</span>
+            <strong>Visitor</strong>
+            <span>Requests the public hostname over HTTPS.</span>
+          </li>
+          <li class="route-node route-node-accent">
+            <span class="node-index">02</span>
+            <strong>Cloudflare edge</strong>
+            <span>Terminates TLS, filters traffic, and serves cache hits.</span>
+          </li>
+          <li class="route-node">
+            <span class="node-index">03</span>
+            <strong>Encrypted Tunnel</strong>
+            <span>Uses connections initiated by <code>cloudflared</code>.</span>
+          </li>
+          <li class="route-node">
+            <span class="node-index">04</span>
+            <strong>Private origin</strong>
+            <span>Nginx serves static files on loopback port 8080.</span>
+          </li>
+        </ol>
+
+        <div class="boundary-note">
+          <span aria-hidden="true">↳</span>
+          <p><strong>Trust boundary:</strong> Cloudflare is the only public application entry point. The GCP firewall has no inbound allow rule.</p>
+        </div>
+      </section>
+
+      <section class="controls-section" id="controls" aria-labelledby="controls-title">
+        <div class="section-heading">
+          <p class="eyebrow">02 / CONTROL PLANE</p>
+          <h2 id="controls-title">Protection in layers, with the limits left visible.</h2>
+        </div>
+
+        <div class="control-grid">
+          <article class="control-card">
+            <span class="control-tag">IDENTITY</span>
+            <h3>DNS as code</h3>
+            <p>Proxied records reference the Tunnel resource, so teardown order is explicit and dangling records are less likely.</p>
+            <span class="control-state">Terraform managed</span>
+          </article>
+          <article class="control-card">
+            <span class="control-tag">CONFIDENTIALITY</span>
+            <h3>Automatic edge TLS</h3>
+            <p>Universal SSL handles the browser certificate while HTTPS redirects and a TLS 1.2 minimum are enforced at the zone.</p>
+            <span class="control-state">Free plan baseline</span>
+          </article>
+          <article class="control-card">
+            <span class="control-tag">AVAILABILITY</span>
+            <h3>DDoS and cache</h3>
+            <p>Cloudflare's standard DDoS systems sit in front of a cache-friendly static origin, reducing work that reaches the VM.</p>
+            <span class="control-state">Always-on edge</span>
+          </article>
+          <article class="control-card">
+            <span class="control-tag">APPLICATION</span>
+            <h3>Static-only WAF rule</h3>
+            <p>GET and HEAD are expected. Other methods are blocked until a future form or API is reviewed and intentionally enabled.</p>
+            <span class="control-state">One custom rule</span>
+          </article>
+        </div>
+
+        <details class="limits-panel">
+          <summary>What this design does not promise</summary>
+          <div>
+            <p>Cloudflare protects traffic that actually passes through Cloudflare. Leaked credentials, unsafe application code, compromised cloud accounts, and stale third-party resources require separate controls.</p>
+            <p>Security Insights can detect suspicious DNS state, but periodic detection is not prevention. The repository keeps decommissioning order reviewable and still expects a human to verify the final DNS state.</p>
+          </div>
+        </details>
+      </section>
+
+      <section class="deploy-section" id="deploy" aria-labelledby="deploy-title">
+        <div class="deploy-copy">
+          <p class="eyebrow">03 / DELIVERY</p>
+          <h2 id="deploy-title">Manual where ownership matters. Automated where drift matters.</h2>
+          <p>Buy the domain and delegate nameservers with a human in the loop. Then let a reviewed Terraform plan build the network, VM, Tunnel, DNS records, and edge settings.</p>
+        </div>
+        <ol class="deploy-steps">
+          <li><span>01</span><div><strong>Register</strong><p>Purchase the domain and protect the registrar account with MFA.</p></div></li>
+          <li><span>02</span><div><strong>Delegate</strong><p>Point the registrar at Cloudflare's assigned nameservers.</p></div></li>
+          <li><span>03</span><div><strong>Plan</strong><p>Review the proposed cloud and edge changes before apply.</p></div></li>
+          <li><span>04</span><div><strong>Verify</strong><p>Test HTTPS, headers, DNS answers, Tunnel health, and blocked methods.</p></div></li>
+        </ol>
+      </section>
+    </main>
+
+    <footer>
+      <p>Edgeward Cloud Security Lab <span aria-hidden="true">/</span> <span data-year></span></p>
+      <p>Built to explain the boundary, not hide it.</p>
+    </footer>
+  </body>
+</html>

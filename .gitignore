@@ -1,0 +1,47 @@
+# Terraform working data and local credentials
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+*.tfplan
+tfplan
+plan.out
+.terraformrc
+terraform.rc
+crash.log
+crash.*.log
+
+# Environment files
+.env
+.env.*
+!.env.example
+.dev.vars
+.dev.vars.*
+!.dev.vars.example
+.npmrc
+.pypirc
+.netrc
+
+# Private keys and exported cloud credentials
+*.key
+*.pem
+*.p12
+*.pfx
+id_rsa
+id_rsa.*
+id_ed25519
+id_ed25519.*
+credentials.json
+service-account*.json
+gcp-key*.json
+azureProfile.json
+
+# Local tooling
+.wrangler/
+node_modules/
+coverage/
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

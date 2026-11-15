@@ -1,0 +1,16 @@
+project_name          = "edgeward"
+gcp_project_id        = "replace-with-your-gcp-project-id"
+gcp_region            = "us-central1"
+gcp_zone              = "us-central1-a"
+machine_type          = "e2-micro"
+
+cloudflare_account_id = "replace-with-your-cloudflare-account-id"
+cloudflare_zone_id    = "replace-with-your-cloudflare-zone-id"
+domain_name           = "example.com"
+
+# Secure default: no public IP on the VM. Cloud NAT has a small cost.
+enable_cloud_nat      = true
+assign_external_ip    = false
+
+enable_static_site_waf = true
+enable_dnssec          = false
