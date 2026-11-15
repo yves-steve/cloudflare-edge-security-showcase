@@ -2,6 +2,15 @@
 
 A small public website used to compare two valid deployment patterns: hosting static assets directly on Cloudflare, or hosting an origin on Google Cloud and reaching it through Cloudflare Tunnel. The application stays intentionally simple so the repository can focus on cost, DNS, TLS, CDN, DDoS protection, origin isolation, and reproducible infrastructure.
 
+## Languages & tooling
+
+[![HTML](https://img.shields.io/badge/HTML-E34F26?style=flat&logo=html5&logoColor=white)](https://developer.mozilla.org/docs/Web/HTML)
+[![CSS](https://img.shields.io/badge/CSS-1572B6?style=flat&logo=css3&logoColor=white)](https://developer.mozilla.org/docs/Web/CSS)
+[![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black)](https://developer.mozilla.org/docs/Web/JavaScript)
+[![Terraform](https://img.shields.io/badge/Terraform-844FBA?style=flat&logo=terraform&logoColor=white)](https://developer.hashicorp.com/terraform)
+[![Shell](https://img.shields.io/badge/Shell-4EAA25?style=flat&logo=gnubash&logoColor=white)](https://www.gnu.org/software/bash/)
+[![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat&logo=docker&logoColor=white)](https://www.docker.com/)
+
 > *The website is deliberately simple. The threat model has enough hobbies already.*
 
 ## Recommendation: two tracks, one sensible cloud bill
