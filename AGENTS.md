@@ -23,7 +23,8 @@ This repository is a public portfolio project demonstrating a small static site 
 9. Do not run `terraform apply` or `terraform destroy` from automation without a reviewed plan and an approved GitHub deployment environment.
 10. If a secret is exposed, stop using it and revoke or rotate it immediately. Removing the file or rewriting Git history does not make the credential safe to reuse.
 11. Pin every external GitHub Action to its full 40-character commit SHA and retain the release tag in a comment. Do not use mutable major-version tags such as `@v4`, branches, or `@main`.
-12. Keep dependency update automation enabled so pinned Action SHAs, Terraform providers, and container base images receive reviewed update pull requests.
+12. Pin runtime container images with both a readable release tag and a full `sha256` digest. Never deploy `latest` or another mutable tag. Update the tag and digest together after reviewing the upstream release.
+13. Keep dependency update automation enabled so pinned Action SHAs, Terraform providers, and container base images receive reviewed update pull requests.
 
 ## Validation
 

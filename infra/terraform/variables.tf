@@ -32,6 +32,17 @@ variable "machine_type" {
   default     = "e2-micro"
 }
 
+variable "cloudflared_image" {
+  description = "Cloudflare Tunnel container image pinned by release tag and immutable multi-platform digest."
+  type        = string
+  default     = "cloudflare/cloudflared:2026.11.0@sha256:b94b96edf2c9c4360f8879c8580cfaa99077f19c849ec595ca2f711b27d4f344"
+
+  validation {
+    condition     = can(regex("^cloudflare/cloudflared:[0-9]{4}\\.[0-9]{1,2}\\.[0-9]+@sha256:[0-9a-f]{64}$", var.cloudflared_image))
+    error_message = "cloudflared_image must use an explicit release tag and a full sha256 digest."
+  }
+}
+
 variable "enable_cloud_nat" {
   description = "Create Cloud NAT so the origin VM has outbound access without a public IP. This has a small cost."
   type        = bool

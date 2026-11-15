@@ -25,10 +25,11 @@ docker run --detach \
   --volume "$NGINX_CONFIG:/etc/nginx/conf.d/default.conf:ro" \
   nginx:1.29-alpine
 
-docker pull cloudflare/cloudflared:latest
+readonly CLOUDFLARED_IMAGE='${cloudflared_image}'
+docker pull "$CLOUDFLARED_IMAGE"
 docker run --detach \
   --name cloudflared \
   --network host \
   --restart unless-stopped \
-  cloudflare/cloudflared:latest \
+  "$CLOUDFLARED_IMAGE" \
   tunnel --no-autoupdate run --token '${tunnel_token}'

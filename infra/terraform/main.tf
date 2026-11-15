@@ -91,11 +91,12 @@ resource "google_compute_instance" "origin" {
   }
 
   metadata_startup_script = templatefile("${path.module}/startup.sh.tftpl", {
-    index_html_b64 = base64encode(file("${path.module}/../../site/index.html"))
-    nginx_conf_b64 = base64encode(file("${path.module}/../../site/nginx.conf"))
-    script_js_b64  = base64encode(file("${path.module}/../../site/script.js"))
-    styles_css_b64 = base64encode(file("${path.module}/../../site/styles.css"))
-    tunnel_token   = data.cloudflare_zero_trust_tunnel_cloudflared_token.origin.token
+    cloudflared_image = var.cloudflared_image
+    index_html_b64    = base64encode(file("${path.module}/../../site/index.html"))
+    nginx_conf_b64    = base64encode(file("${path.module}/../../site/nginx.conf"))
+    script_js_b64     = base64encode(file("${path.module}/../../site/script.js"))
+    styles_css_b64    = base64encode(file("${path.module}/../../site/styles.css"))
+    tunnel_token      = data.cloudflare_zero_trust_tunnel_cloudflared_token.origin.token
   })
 
   shielded_instance_config {

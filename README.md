@@ -172,6 +172,8 @@ For a public GitHub repository, GitHub secret scanning runs automatically for fr
 
 All third-party GitHub Actions in this repository are pinned to immutable, full-length commit SHAs, with the corresponding release tag retained in a comment. GitHub identifies full-length commit pinning as the only immutable way to reference an Action. In the repository's **Settings → Actions → General**, also enable **Require actions to be pinned to a full-length commit SHA**. Dependabot is configured to propose reviewed updates to these pins.
 
+Runtime container images use a readable release tag plus an immutable `sha256` digest. The tag explains what should be running; the digest guarantees what actually runs. Update both values together after reviewing the upstream release notes.
+
 If a secret is committed, revoke or rotate it first, then remove it from the current tree and Git history. Deleting the file alone does not invalidate copies already fetched or cached.
 
 ### 3. Configure and apply Terraform
